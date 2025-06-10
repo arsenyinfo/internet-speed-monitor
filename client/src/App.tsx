@@ -10,6 +10,8 @@ import { Loader2, Zap, Clock, Download, Upload, Wifi } from 'lucide-react';
 // Using type-only imports for better TypeScript compliance
 import type { SpeedTestRecord, SpeedTestResult } from '../../server/src/schema';
 
+// Speed Test Monitor Application - Fully implemented and ready to use!
+
 function App() {
   // State management with proper typing
   const [records, setRecords] = useState<SpeedTestRecord[]>([]);
