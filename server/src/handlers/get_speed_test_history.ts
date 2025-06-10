@@ -1,12 +1,28 @@
 
+import { db } from '../db';
+import { speedTestRecordsTable } from '../db/schema';
 import { type SpeedTestRecord } from '../schema';
+import { desc } from 'drizzle-orm';
 
 export async function getSpeedTestHistory(): Promise<SpeedTestRecord[]> {
-    // This is a placeholder declaration! Real code should be implemented here.
-    // The goal of this handler is to:
-    // 1. Query the speed_test_records table from the database
-    // 2. Return all historical speed test records ordered by timestamp (newest first)
-    // 3. Convert database results to match SpeedTestRecord schema
-    
-    return Promise.resolve([] as SpeedTestRecord[]);
+  try {
+    // Query all speed test records ordered by timestamp (newest first)
+    const results = await db.select()
+      .from(speedTestRecordsTable)
+      .orderBy(desc(speedTestRecordsTable.timestamp))
+      .execute();
+
+    // Convert database results to match SpeedTestRecord schema
+    // Note: real columns are already numbers, timestamp is already Date
+    return results.map(record => ({
+      id: record.id,
+      timestamp: record.timestamp,
+      download_speed: record.download_speed,
+      upload_speed: record.upload_speed,
+      ping: record.ping
+    }));
+  } catch (error) {
+    console.error('Failed to get speed test history:', error);
+    throw error;
+  }
 }
